@@ -12,13 +12,11 @@ app.get('/pokemon', (req, res, next) => {
 
 app.get('/search', (req, res, next) => {
   const { name, type = "" } = req.query
-
   const foundPokemon = allPokemon.filter((searchPokemon) => {
     return type.length ? 
-    searchPokemon.types.includes(type.toLowerCase()) : 
-    searchPokemon.name.toLowerCase().includes(name.toLowerCase())
+    searchPokemon.types.includes(type) : 
+    searchPokemon.name.includes(name)
   })
-
   if (foundPokemon.length === 0) {
     res.status(404)
     return res.send("Pokemon not found! Try adding more details.")
@@ -28,15 +26,12 @@ app.get('/search', (req, res, next) => {
 
 app.get('/pokemon/:id', (req, res, next) => {
   const { id } = req.params
-
   const foundPokemon = allPokemon.find((element) => {
     return element.id === Number(id)
   })
-
   if (!foundPokemon) {
     res.status(404)
     res.send("Sorry, we do not have this Pokemon in our list!")
   }
-
   res.send([foundPokemon])
 })
