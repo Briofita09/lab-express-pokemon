@@ -11,11 +11,11 @@ describe("GET /pokemons", () => {
 });
 
 describe("GET /pokemon/:id", () => {
-  it("should return an array of 1 pokemon", async () => {
+  it("should return an object of 1 pokemon", async () => {
     const response = await supertest(app).get("/pokemon/1");
 
     expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body).toBeInstanceOf(Object);
   });
 });
 
