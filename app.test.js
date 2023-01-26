@@ -15,7 +15,7 @@ describe("GET /pokemon/:id", () => {
     const response = await supertest(app).get("/pokemon/1");
 
     expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body).toBeInstanceOf(Object);
   });
 });
 

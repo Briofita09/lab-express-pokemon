@@ -11,27 +11,50 @@ app.get('/pokemon', (req, res, next) => {
 })
 
 
-
-// solução que "encontrei" na internet
-app.get('/search', (req, res, next) => {
-  const { name, type = "" } = req.query
-
-  const foundPokemon = allPokemon.filter((searchPokemon) => {
-    return type.length ? 
-    searchPokemon.types.includes(type.toLowerCase()) : 
-    searchPokemon.name.toLowerCase().includes(name.toLowerCase())
+// Solução NILTON em sala de aula
+const findPokemonByName = name => {
+  return allPokemon.find((element) => {
+    return element.name === name
   })
+}
 
-  if (foundPokemon.length === 0) {
-    res.status(404)
-    return res.send("Pokemon not found! Try adding more details.")
+const findPokemonsByType = type => {
+  return allPokemon.filter(element => {
+    return element.types.includes(type)
+  })
+}
+
+app.get('/search', (req, res, next) => {
+  const { name, type } = req.query
+
+  let result = null
+
+  if (name) {
+    result = findPokemonByName(name)
+  } else if (type) {
+    result = findPokemonsByType(type)
   }
-  return res.json(foundPokemon)
+  return res.json(result)
+
+  // *** solução que "encontrei" na internet
+  // app.get('/search', (req, res, next) => {
+  // const { name, type = "" } = req.query
+
+  // const foundPokemon = allPokemon.filter((searchPokemon) => {
+  //   return type.length ? 
+  //   searchPokemon.types.includes(type.toLowerCase()) : 
+  //   searchPokemon.name.toLowerCase().includes(name.toLowerCase())
+  // })
+
+  // if (foundPokemon.length === 0) {
+  //   res.status(404)
+  //   return res.send("Pokemon not found! Try adding more details.")
+  // }
+  // return res.json(foundPokemon)
 })
 
-
-
 // *** MINHA solução que não funcionou a busca por TYPE *** 
+// app.get('/search', (req, res, next) => {
 //   const { name, type } = req.query
 //   let foundPokemon
   
@@ -62,6 +85,8 @@ app.get('/pokemon/:id', (req, res, next) => {
 
   const foundPokemon = allPokemon.find((element) => {
     return element.id === Number(id)
+    // OU return element.id === +id
+    // OU return element.id === parseInt(id, 10)
     // OU return element.id.toString() === id
   })
 
@@ -70,5 +95,5 @@ app.get('/pokemon/:id', (req, res, next) => {
     res.send("Sorry, we do not have this Pokemon in our list!")
   }
 
-  res.send([foundPokemon])
+  res.send(foundPokemon)
 })
